@@ -3,7 +3,7 @@ import { TableView } from './TableView'
 import './App.css';
 
 function App() {
-  const [data, setData] = useState([])
+  let [data, setData] = useState([])
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/users').then(r => r.json()).then(d => {
       d = d.map(({ name, username, email, id, phone, website, company, address }) => {
@@ -15,10 +15,14 @@ function App() {
       setData(d)
     })
   }, [])
+  const onDeleteClick = (id) => {
+    data = data.filter(d => d.id !== id)
+    setData(data)
+  }
   //console.log(data);
   return (
     <main>
-        <TableView data={data} />
+        <TableView onDeleteClick={onDeleteClick} data={data} />
     </main>
   );
 }
