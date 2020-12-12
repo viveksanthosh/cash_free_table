@@ -1,0 +1,21 @@
+.table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin: 2rem;
+}
+
+.table td, .table th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.table tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.table .table-body a {
+    color: blue;
+    margin-left: 1rem;
+}

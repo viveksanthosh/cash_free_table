@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { TableView } from './TableView'
 import './App.css';
 
 function App() {
@@ -7,21 +8,18 @@ function App() {
     fetch('https://jsonplaceholder.typicode.com/users').then(r => r.json()).then(d => {
       d = d.map(({ name, username, email, id, phone, website, company, address }) => {
         return ({
-          name, username, email, id, phone, website,
+          id, name, username, email, phone, website,
           company: company.name, address: `${address.suite}, ${address.street}, ${address.city}`
         })
       })
       setData(d)
     })
   }, [])
-  console.log(data);
+  //console.log(data);
   return (
-    <div className="App">
-      <header className="App-header">
-
-
-      </header>
-    </div>
+    <main>
+        <TableView data={data} />
+    </main>
   );
 }
 
