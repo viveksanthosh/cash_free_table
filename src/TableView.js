@@ -18,24 +18,26 @@ const TableView = ({ data, onDeleteClick,
 
     }, [data, rows])
 
-    console.log({ data });
+    const onRowNumberChange = (e) => {
+        const row = Number(e.target.value)
+        if (!Number.isNaN(row))
+            setRows(row)
+    }
 
     if (!data || data.length === 0)
         return null
-
 
     const headers = Object.keys(data[0])
 
     let displayData = data;
     if (page) {
-        displayData = data.slice(page * rows, (page + 1) * rows)
+        displayData = data.slice((page - 1) * rows, page * rows)
     }
-    console.log({ displayData });
 
     return <section className='tableView'>
 
         <label className='numberOrRows'>Number of rows to display
-            <input />
+            <input value={rows ? rows : ''} onChange={onRowNumberChange} />
         </label>
 
         <table className='table'>
@@ -54,9 +56,9 @@ const TableView = ({ data, onDeleteClick,
         </table>
 
         {page && <div className='pagination'>
-            <span className={`${page === 0 ? 'disabled' : ''} pagination-button`}>Prev</span>
-            <span className={`pagination-number`}>2</span>
-            <span className={`${page === 0} pagination-button`}>Next</span>
+            <span className={`${page === 1 ? 'disabled' : ''} pagination-button`}>Prev</span>
+            <span className={`pagination-number`}>{page}</span>
+            <span className={`${(page * rows) >= data.length ? 'disabled' : ''} pagination-button`}>Next</span>
         </div>}
     </section>
 }
