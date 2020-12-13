@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
 import './TableView.css'
+import { formatUserData } from './utils'
+const userCache = {}
 
 const TableView = ({ data, onDeleteClick,
     sortableHeaders, onSortClick }) => {
 
     const [rows, setRows] = useState(null);
     const [page, setPage] = useState(null);
+    const [userDetails, setUserDetails] = useState(null);
 
     useEffect(() => {
         const paginationNeeded = (rows && rows < data.length)
@@ -27,8 +30,22 @@ const TableView = ({ data, onDeleteClick,
     const onPageIncrement = () => { setPage(page + 1) }
     const onPageDecrement = () => { setPage(page - 1) }
 
+    const onUserDetailsClose = () => { setUserDetails(null) }
+
+    const onOpenClick = async (userID) => {
+        if (userCache[userID]) {
+            setUserDetails(userCache[userID])
+        }
+        const data = formatUserData(await fetch('https://jsonplaceholder.typicode.com/users/' + userID).then(r => r.json()))
+        userCache[userID] = data
+        setUserDetails(data)
+    }
+
     if (!data || data.length === 0)
         return null
+
+    if (userDetails)
+        return <UserData onClose={onUserDetailsClose} userDetails={userDetails} />
 
     const headers = Object.keys(data[0])
 
@@ -52,6 +69,7 @@ const TableView = ({ data, onDeleteClick,
             <tbody>
                 {displayData.map(d => <Body
                     onDeleteClick={onDeleteClick}
+                    onOpenClick={onOpenClick}
                     key={d.id}
                     headers={headers}
                     values={d} />)}
@@ -88,12 +106,28 @@ const Header = ({ headers, sortableHeaders, onSortClick }) => {
     </tr>
 }
 
-const Body = ({ headers, values, onDeleteClick }) => (<tr className='table-body'>
+const Body = ({ headers, values, onDeleteClick, onOpenClick }) => (<tr className='table-body'>
     {headers.map(h => <td key={h}>{values[h]}</td>)}
-    <td><a>Open</a>
+    <td><a onClick={() => {
+        onOpenClick(values.id)
+    }}>Open</a>
         <a onClick={() => {
             onDeleteClick(values.id)
         }}>Delete</a></td>
 </tr>)
+
+const UserData = ({ userDetails, onClose }) => {
+    return <div className='userDisplay'>
+        <span onClick={onClose} className='close'>close</span>
+        {Object.entries(userDetails).map(([k, v]) => <CellRow key={k} text1={k} text2={v} />)}
+    </div>
+}
+
+const CellRow = ({ text1, text2 }) => {
+    return <div className='displayRow'>
+        <span className='displayCell header'>{text1}</span>
+        <span className='displayCell'>{text2}</span>
+    </div>
+}
 
 export { TableView }

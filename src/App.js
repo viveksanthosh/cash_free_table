@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { TableView } from './TableView'
+import { formatUserData } from './utils'
 import './App.css';
 
 const initialSortableHeaders = { name: { type: 'string', sortOrder: null }, email: { type: 'string', sortOrder: null } }
@@ -10,12 +11,7 @@ function App() {
 
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/users').then(r => r.json()).then(d => {
-      d = d.map(({ name, username, email, id, phone, website, company, address }) => {
-        return ({
-          id, name, username, email, phone, website,
-          company: company.name, address: `${address.suite}, ${address.street}, ${address.city}`
-        })
-      })
+      d = d.map(formatUserData)
       setData(d)
     })
   }, [])

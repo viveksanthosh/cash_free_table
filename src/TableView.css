@@ -78,3 +78,28 @@
     display: inline-block;
     margin-left: 10px;
 }
+
+.userDisplay {
+    padding: 2rem;
+}
+
+.userDisplay .displayRow .displayCell {
+    display: inline-block;
+    border: 1px solid black;
+    padding: 0.25rem 0.5rem;
+    width: 25rem;
+}
+
+.userDisplay .displayRow .displayCell.header {
+    border-right: none;
+    width: 5rem;
+    font-weight: 700;
+}
+
+.userDisplay .close {
+    font-weight: 500;
+    color: blue;
+    margin-bottom: 0.5rem;
+    display: block;
+    cursor: pointer;
+}
