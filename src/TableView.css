@@ -26,8 +26,10 @@
     cursor: pointer;
     color: blue;
 }
+
 .pagination .pagination-button.disabled {
-    cursor: none;
+    cursor: not-allowed;
+    pointer-events: none !important;
     color: grey;
 }
 

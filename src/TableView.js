@@ -15,7 +15,7 @@ const TableView = ({ data, onDeleteClick,
         else if (paginationNeeded && page === null) {
             setPage(1); return;
         }
-
+        setPage(1);
     }, [data, rows])
 
     const onRowNumberChange = (e) => {
@@ -23,6 +23,9 @@ const TableView = ({ data, onDeleteClick,
         if (!Number.isNaN(row))
             setRows(row)
     }
+
+    const onPageIncrement = () => { setPage(page + 1) }
+    const onPageDecrement = () => { setPage(page - 1) }
 
     if (!data || data.length === 0)
         return null
@@ -56,9 +59,9 @@ const TableView = ({ data, onDeleteClick,
         </table>
 
         {page && <div className='pagination'>
-            <span className={`${page === 1 ? 'disabled' : ''} pagination-button`}>Prev</span>
+            <span onClick={onPageDecrement} className={`${page === 1 ? 'disabled' : ''} pagination-button`}>Prev</span>
             <span className={`pagination-number`}>{page}</span>
-            <span className={`${(page * rows) >= data.length ? 'disabled' : ''} pagination-button`}>Next</span>
+            <span onClick={onPageIncrement} className={`${(page * rows) >= data.length ? 'disabled' : ''} pagination-button`}>Next</span>
         </div>}
     </section>
 }
